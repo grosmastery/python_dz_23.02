@@ -18,17 +18,23 @@ def get_todos(todo: str) -> list:
     return todos
 
 def main(user: str, todo: str) ->None:
+    count = 0
     username = get_users(user)
     todos = get_todos(todo)
     os.makedirs('users', exist_ok=True)
     for users in username:
         with open(os.path.join('users', f'{users["id"]} - {users["username"]}.csv'), 'w', encoding='utf8') as f:
             for does in todos:
-                if does['id'] == users['id']:
+                if does['userId'] == users['id']:
                     fieldnames = ['id', 'title', 'completed']
                     writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
-                    writer.writeheader()
-                    writer.writerow(does)
+                    if count == 0:
+                        writer.writeheader()
+                        writer.writerow(does)
+                        count +=1
+                    elif count == 1:
+                        writer.writerow(does)
+
 
 
 
